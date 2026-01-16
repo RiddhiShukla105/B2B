@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@keyframes marquee-alternate {
+  0% {
+    transform: translateX(0%);
+  }
+  50% {
+    transform: translateX(60%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-alternate {
+  animation: marquee-alternate 6s ease-in-out infinite;
+}
