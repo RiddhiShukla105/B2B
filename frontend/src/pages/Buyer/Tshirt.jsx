@@ -1,7 +1,8 @@
 import React,{useState,useEffect,useRef} from 'react'
 import Cards from '../../components/Cards'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import ScrollReveal from '../../components/ScrollReveal'
 
 
 const Tshirt = () => {
@@ -27,32 +28,74 @@ const Tshirt = () => {
       navigate(`/tshirt/${item._id}`,{state:item})
     }
   return (
-    <>
-    {/* <section>
-    <img src="/image/banner6.jpg" alt="" />
-  </section> */}
-      <div className='p-12 pt-0! bg-gray-50/50'>
-      <h1 className="text-4xl font-bold font-serif text-center pt-8">
-        Our Collection
-      </h1>
-      <div className="mt-4 flex justify-center mb-4 pb-8">
-          <span className="h-1 w-24 rounded-full bg-red-700"></span>
-        </div>
-        <div className='grid grid-cols-4 gap-8'>
 
-        { Array.isArray(products) && products.map((item,id)=>(
-            <Cards key={id} 
-            image={`${import.meta.env.VITE_API_URL}/uploads/${item.image[0]}`} 
+<div className='bg-[#fff9f3] pb-8'>
+  {/* Banner Section */}
+  <section className="w-full relative overflow-hidden pb-0!">
+  <img
+    src="/image/banner13.png"
+    alt="Banner"
+    className="
+      w-full
+      h-[150px]
+      sm:h-[150px]
+      md:h-[250px]
+      lg:h-[400px]
+      object-cover
+      object-center
+    "
+  />
+</section>
+
+
+  {/* Collection Section */}
+  <div className="px-4 sm:px-6 md:px-10 lg:px-12 pt-0!">
+ <div
+  className="
+    px-3                 /* phone side padding */
+    sm:px-4
+    md:px-6
+    lg:px-0
+
+    grid
+    grid-cols-2          /* phone: 2 columns */
+    sm:grid-cols-2
+    md:grid-cols-3
+    lg:grid-cols-4
+
+    gap-x-3              /* tighter horizontal gap */
+    gap-y-6              /* more vertical breathing room */
+    sm:gap-x-4
+    sm:gap-y-6
+    md:gap-6
+    lg:gap-8
+  "
+>
+  {Array.isArray(products) &&
+    products.map((item, id) => (
+      <ScrollReveal key={id}>
+        <div className="w-full" onClick={() => handleClick(item)}>
+ 
+          <Cards
+            image={item.image.map(
+              img => `${import.meta.env.VITE_API_URL}/uploads/${img}`
+            )}
             title={item.name}
-            subtitle={`${item.price}`}
-            onView={()=>handleClick(item)}
-            onAddToCart={()=>console.log("Add to cart: ",item._id)}
-            />
-        ))}
+            price={item.price}
+            onAddToCart={() => handleAdd(item)}
+            onView={() => handleClick(item)}
+            onWishlist={() => handleWishlist(item)}
+          />
+        </div>
 
-      </div>
-      </div>
-    </>
+      </ScrollReveal>
+    ))}
+</div>
+
+
+  </div>
+</div>
+
   )
 }
 

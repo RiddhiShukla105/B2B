@@ -7,7 +7,7 @@ const Slider = () => {
   // your slider images
   const slider = [
     // {
-    //   itemImageSrc: "/image/avenger.avif",
+    //   hitemImageSrc: "/image/avenger.avif",
     //   alt: "Avenger",
     // },
     {

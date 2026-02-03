@@ -24,7 +24,7 @@ const OrderData = () => {
     const token = localStorage.getItem("token");
 
     const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/order/get-order`,
+      `${import.meta.env.VITE_API_URL}/api/order/getOrder`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ const OrderData = () => {
                   </p>
 
                   <p className="text-sm mt-1 text-gray-700">
-                    ${orderItem.totalAmount} • {orderItem.paymentMethod.toUpperCase()}
+                    ${orderItem.totalAmount} • {orderItem.paymentMethod}
                   </p>
                 </div>
 
@@ -130,7 +130,7 @@ const OrderData = () => {
                       </div>
 
                       <p className="font-semibold text-sm">
-                        ${product.price}
+                        ${(product.price)*(product.qty)}
                       </p>
                     </div>
                   ))}

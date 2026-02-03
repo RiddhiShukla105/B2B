@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from "react";
 import axios from 'axios'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
+import Swal from "sweetalert2";
 
 const Signup=()=>{
 
@@ -22,12 +23,33 @@ const Signup=()=>{
         setForm({...form,[e.target.name]:e.target.value})
     }
 
+    const navigate=useNavigate()
+
     const handleSubmit=async(e)=>{
         try{
             e.preventDefault();
+            const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+            if (!emailRegex.test(form.email)) {
+                Swal.fire({ icon: "error", title: "Invalid Email Format" });
+                return;
+            }
+
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            if (!passwordRegex.test(form.password)) {
+                Swal.fire({ icon: "error", title: "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character." });
+                return;
+            }
+
+            if (!(form.name.length > 2)) {
+                Swal.fire({icon:"error",title:"Name should be greater than 2 characters"})
+                return;
+            }
+
+
             const res=await axios.post(`${import.meta.env.VITE_API_URL}/api/user/create-user`,form)
-            console.log(res)
+            // console.log(res)
             setForm({name:"",email:"",password:""})
+            navigate("/login")
             e.target.reset()
             fetchdata()
         }catch(error){

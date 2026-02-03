@@ -13,6 +13,8 @@ import Cart from '../pages/Buyer/Cart'
 import ProtectedRoute from './ProtectedRoutes'
 import OrderData from '../pages/Admin/OrderData'
 import OrderUpdate from '../pages/Admin/OrderUpdate'
+import Wishlist from '../pages/Buyer/Wishlist'
+import Admin_Dashboard from '../pages/Admin/Admin_Dashboard'
 
 
 const AppRoutes=[
@@ -70,25 +72,38 @@ const AppRoutes=[
     {
         path:"/productdata",
         Component:()=>(
-            <ProtectedRoute publicRoute><ProductData/></ProtectedRoute>
+            <ProtectedRoute roleRequired="admin"><ProductData/></ProtectedRoute>
         )
     },
     {
         path:"/admin",
         Component:()=>(
-            <ProtectedRoute publicRoute><Admin/></ProtectedRoute>
+            <ProtectedRoute roleRequired="admin"><Admin/></ProtectedRoute>
         )
     },
     {
         path:"/orderdata",
         Component:()=>(
             <ProtectedRoute publicRoute><OrderData/></ProtectedRoute>
-        )
+        ),
+        name:"Order"
     },
     {
         path:"/orderupdate",
         Component:()=>(
-            <ProtectedRoute publicRoute><OrderUpdate/></ProtectedRoute>
+            <ProtectedRoute roleRequired="admin"><OrderUpdate/></ProtectedRoute>
+        )
+    },
+    {
+        path:"/wishlist",
+        Component:()=>(
+            <ProtectedRoute publicRoute><Wishlist/></ProtectedRoute>
+        )
+    },
+    {
+        path:"/admindashboard",
+        Component:()=>(
+            <ProtectedRoute publicRoute><Admin_Dashboard/></ProtectedRoute>
         )
     }
     // {

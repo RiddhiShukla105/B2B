@@ -20,26 +20,6 @@ const Item = () => {
 
   const { addToCart } = useContext(CartContext);
 
-  // useEffect(() => {
-  //   if (!product) {
-  //     setLoading(true);
-  //     axios
-  //       .get(`${import.meta.env.VITE_API_URL}/api/product/${id}`)
-  //       .then((res) => {
-  //         const p = res.data.product;
-  //         setProduct(p);
-  //         setActiveImg(
-  //           `${import.meta.env.VITE_API_URL}/uploads/${p.image?.[0]}`
-  //         );
-  //       })
-  //       .catch(() => toast.error("Failed to load product"))
-  //       .finally(() => setLoading(false));
-  //   } else {
-  //     setActiveImg(
-  //       `${import.meta.env.VITE_API_URL}/uploads/${product.image?.[0]}`
-  //     );
-  //   }
-  // }, [id]);
 
   useEffect(() => {
   const pending = sessionStorage.getItem("pendingCart");
@@ -48,6 +28,10 @@ const Item = () => {
     addToCart(data);
     sessionStorage.removeItem("pendingCart");
     navigate("/cart");
+  }
+
+  if (product?.image?.length > 0) {
+    setActiveImg(product.image[0]);
   }
 }, []);
 
@@ -63,11 +47,17 @@ const Item = () => {
     }
 
     const token = getToken();
-    // if (!token) {
-    //   toast.warn("Login required");
-    //   navigate("/login", { state: { from: `/product/${id}` } });
-    //   return;
-    // }
+   
+    if(!token){
+      toast.warn("Please login to add items to cart",{
+        position:"top-right",
+        autoClose:2000
+      });
+
+      setTimeout(()=>{
+        navigate("/login")
+      })
+    }
 
     if (!token) {
   sessionStorage.setItem(
@@ -99,7 +89,7 @@ const Item = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="max-w-7xl mx-auto px-4 md:py-12 py-6 grid grid-cols-1 md:grid-cols-2 gap-12">
 
       {/* IMAGE SECTION */}
       <div className="flex gap-4">
@@ -120,35 +110,40 @@ const Item = () => {
 
         <div className="flex-1 overflow-hidden rounded-xl">
           <img
-            src={activeImg}
+            src={
+                activeImg.startsWith("http")
+                  ? activeImg
+                  : `${import.meta.env.VITE_API_URL}/uploads/${activeImg}`
+              }
             alt={product.name}
-            className="w-full h-[550px] object-cover hover:scale-105 transition duration-500"
+            className="w-full md:h-[550px] object-cover hover:scale-105 transition duration-500"
           />
+
         </div>
       </div>
 
       {/* DETAILS */}
-      <div className="space-y-6">
-        <h1 className="text-4xl font-bold">{product.name}</h1>
+      <div className="space-y-2 md:space-y-6">
+        <h1 className="text-2xl md:text-4xl  font-serif">{product.name}</h1>
 
         {/* PRICE */}
         <div className="flex items-center gap-4">
-          <span className="text-3xl font-semibold">${product.price}</span>
+          <span className="md:text-3xl text-xl font-semibold">${product.price}</span>
         </div>
 
-        <p className="text-sm text-gray-500">Inclusive of all taxes</p>
+        <p className="text-sm text-gray-500 font-serif">Inclusive of all taxes</p>
 
         {/* SIZE */}
         <div>
-          <h3 className="font-semibold mb-2">Select Size</h3>
+          <h3 className="font-serif mb-2">Select Size</h3>
           <div className="flex gap-3">
             {["S", "M", "L"].map((size) => (
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-5 py-2 rounded-full border text-sm transition ${
+                className={`px-5 py-2 rounded-full font-serif border text-sm transition ${
                   selectedSize === size
-                    ? "bg-black text-white border-black"
+                    ? "bg-[#342a2a] text-white border-black"
                     : "border-gray-400 hover:border-black"
                 }`}
               >
@@ -162,9 +157,9 @@ const Item = () => {
         <button
           disabled={!selectedSize}
           onClick={handleAddToCart}
-          className={`w-full py-4 rounded-full font-semibold transition ${
+          className={`w-full md:py-4 py-2 rounded-full font-serif transition ${
             selectedSize
-              ? "bg-black text-white hover:opacity-90"
+              ? "bg-[#342a2a] text-white hover:opacity-90 hover:bg-[#2A1F1F]"
               : "bg-gray-300 cursor-not-allowed"
           }`}
         >
@@ -172,18 +167,18 @@ const Item = () => {
         </button>
 
         {/* TRUST */}
-        <div className="grid grid-cols-3 gap-4 text-center text-sm text-gray-600 pt-6 border-t">
+        <div className="grid grid-cols-3 gap-4 text-center text-sm text-gray-600 pt-6 border-t font-serif">
           <div>🚚 Free Shipping</div>
-          <div>🔁 7-Day Returns</div>
+          <div>🔁 30-Day Returns</div>
           <div>🔒 Secure Checkout</div>
         </div>
 
         {/* DESCRIPTION */}
         <div className="pt-6 text-gray-700 space-y-2">
-          <h3 className="font-semibold">Product Description</h3>
+          <h3 className="font-serif md:text-xl">Product Description</h3>
           {Array.isArray(product.desc)
             ? product.desc.map((d, i) => <p key={i}>• {d}</p>)
-            : <p>{product.desc}</p>}
+            : <p className="font-serif text-sm md:text-lg">{product.desc}</p>}
         </div>
       </div>
     </div>

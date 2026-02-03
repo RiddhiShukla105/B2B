@@ -1,9 +1,11 @@
-import React, { useState,useContext } from 'react'
-import axios from 'axios'
-import { CartContext } from "../../context/CartContext"
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { CartContext } from "../../context/CartContext";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 
 const Order = () => {
+  const { cartItems } = useContext(CartContext);
 
   const [userdetail, setUserdetail] = useState({
     name: "",
@@ -13,197 +15,203 @@ const Order = () => {
     state: "",
     country: "",
     zipcode: "",
-    phone: ""
-  })
+    phone: "",
+  });
 
-  const { cartItems, totalPrice } = useContext(CartContext);
-
-
-   const method = "cod";
+  const [isAddressSubmitted, setIsAddressSubmitted] = useState(false);
+  const [paymentReady, setPaymentReady] = useState(false);
+  const [orderId, setOrderId] = useState(null);
 
   const calculatedTotal = cartItems.reduce(
-  (sum, item) => sum + item.price * item.qty,
-  0
-);
-
-  const orderData = {
-  products: cartItems.map((item) => ({
-    productId: item.id,
-    name: item.name,
-    price: item.price,
-    qty: item.qty,
-    size: item.size,
-    image: Array.isArray(item.image) ? item.image : [item.image],
-  })),
-  ...userdetail,
-  paymentMethod: method,
-  totalAmount: calculatedTotal,
-};
-
-
- 
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
 
   const handleInput = (e) => {
-  const { name, value } = e.target;
-  setUserdetail((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
+    const { name, value } = e.target;
+    setUserdetail((prev) => ({ ...prev, [name]: value }));
+  };
 
-
+  /*STEP 1: SAVE ADDRESS API*/
   const handleSubmit = async (e) => {
-    try {
-      e.preventDefault()
+    e.preventDefault();
 
-      const token=localStorage.getItem("token");
-      if(!token){
-        alert("Login Please")
-        return;
-      }
-      console.log("OrderData: ",orderData)
-      const res=await axios.post(`${import.meta.env.VITE_API_URL}/api/order/create-order`, orderData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-      console.log(res)
-      
-      // e.target.reset()
-      // cartItems([])
-      
-    } catch (err) {
-      console.log(err)
+    if (
+      !userdetail.name ||
+      !userdetail.email ||
+      !userdetail.phone ||
+      !userdetail.address
+    ) {
+      alert("Please fill all required fields");
+      return;
     }
-  }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/order/create`,
+        {
+          products: cartItems.map((item) => ({
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            qty: item.qty,
+            size: item.size,
+            image: item.image,
+          })),
+          ...userdetail,
+          totalAmount: calculatedTotal,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setOrderId(res.data.orderId);
+      localStorage.setItem("orderId", res.data.orderId);
+      setIsAddressSubmitted(true);
+      setPaymentReady(true);
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to save address");
+    }
+  };
+
+  /* RESET + DELETE PENDING*/
+  const resetForm = async () => {
+    try {
+      if (orderId) {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/order/${orderId}`
+        );
+      }
+    } catch (err) {
+      console.error("Cleanup failed", err);
+    }
+
+    setOrderId(null);
+    setIsAddressSubmitted(false);
+    setPaymentReady(false);
+    setUserdetail({
+      name: "",
+      email: "",
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      zipcode: "",
+      phone: "",
+    });
+  };
 
   return (
-    <div className="min-h-screen bg-white flex justify-center items-start py-10 px-4">
+    <div className="min-h-screen bg-gray-100 py-20 px-4 flex justify-center">
+      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8">
 
-      {/* Card */}
-      <div className="w-full max-w-3xl bg-zinc-900 text-white rounded-2xl shadow-2xl p-8">
-
-        <h2 className="text-center text-3xl font-bold mb-8 underline">
-          Please Provide Your Address
+        <h2 className="text-2xl font-bold text-center mb-8">
+          Delivery Details
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* Name */}
-          <div>
-            <label className="block text-lg mb-1">Name</label>
-            <input
-              type="text"
-              name="name"
-              onChange={handleInput}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-            />
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="block text-lg mb-1">Email</label>
-            <input
-              type="text"
-              name="email"
-              onChange={handleInput}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-            />
-          </div>
-
-          {/* Address */}
-          <div>
-            <label className="block text-lg mb-1">Address</label>
-            <input
-              type="text"
-              name="address"
-              onChange={handleInput}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-            />
-          </div>
-
-          {/* City & State */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-lg mb-1">City</label>
+        {/* ADDRESS FORM */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            { label: "Full Name", name: "name" },
+            { label: "Email", name: "email", type: "email" },
+            { label: "Address", name: "address" },
+            { label: "City", name: "city" },
+            { label: "State", name: "state" },
+            { label: "Country", name: "country" },
+            { label: "Zip Code", name: "zipcode" },
+            { label: "Phone", name: "phone" },
+          ].map((field) => (
+            <div key={field.name}>
+              <label className="block text-sm font-medium mb-1">
+                {field.label}
+              </label>
               <input
-                type="text"
-                name="city"
+                type={field.type || "text"}
+                name={field.name}
+                value={userdetail[field.name]}
                 onChange={handleInput}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
+                disabled={isAddressSubmitted}
+                className="w-full border rounded-lg px-4 py-3 disabled:bg-gray-100"
               />
             </div>
+          ))}
 
-            <div>
-              <label className="block text-lg mb-1">State</label>
-              <input
-                type="text"
-                name="state"
-                onChange={handleInput}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-              />
-            </div>
-          </div>
-
-          {/* Country & Zip */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-lg mb-1">Country</label>
-              <input
-                type="text"
-                name="country"
-                onChange={handleInput}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-              />
-            </div>
-
-            <div>
-              <label className="block text-lg mb-1">Zipcode</label>
-              <input
-                type="text"
-                name="zipcode"
-                onChange={handleInput}
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-              />
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div>
-            <label className="block text-lg mb-1">Phone</label>
-            <input
-              type="text"
-              name="phone"
-              onChange={handleInput}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/40"
-            />
-          </div>
-
-          {/* Submit */}
-          <div className="text-center pt-6">
+          {!isAddressSubmitted && (
             <button
               type="submit"
-              className="bg-white text-black font-bold px-10 py-3 rounded-2xl hover:bg-white/80 transition"
+              className="w-full bg-black text-white py-3 rounded-xl"
             >
-              Submit
+              Save Address
             </button>
-          </div>
+          )}
         </form>
 
-        {/* Payment */}
-        <div className="text-center mt-8">
-          <button
-            className="bg-blue-500 text-white font-bold px-10 py-3 rounded-2xl hover:bg-blue-600 transition"
-          >
-            Confirm and Pay
-          </button>
-        </div>
+        {/* PAYPAL PAYMENT */}
+        {paymentReady && (
+          <div className="mt-8">
+            <PayPalButtons
+    createOrder={async () => {
+    const token = localStorage.getItem("token");
 
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/order/paypal/create-order`,
+      {
+        amount: calculatedTotal,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    return res.data.paypalOrderId; // PAYPAL ORDER ID ONLY
+  }}
+
+  onApprove={async (data) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // 1️⃣ VERIFY PAYPAL PAYMENT
+      const verifyRes = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/order/paypal/verify`,
+        { paypalOrderId: data.orderID },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // 2️⃣ CONFIRM DB ORDER
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/order/confirm`,
+        {
+          orderId: localStorage.getItem("orderId"),
+          paypalOrderId: data.orderID,
+          paypalTransactionId: verifyRes.data.transactionId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      toast.info("Payment successful! Order confirmed.");
+    } catch (err) {
+      console.error(err);
+      alert("Payment failed.");
+    }
+  }}
+
+  onCancel={resetForm}
+/>
+
+          </div>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Order
-
+export default Order;

@@ -18,7 +18,7 @@ const cartSchema=new mongoose.Schema({
             name:String,
             image:String,
             price:String,
-            quantity:{type:Number,default:5},
+            quantity:{type:Number,default:1},
             size:String
         }
     ]

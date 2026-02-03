@@ -20,12 +20,13 @@ const OrderUpdate = () => {
 
   const fetchdata = async () => {
     const token=localStorage.getItem("token")
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/order/user-order`,{
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/order/userOrder`,{
         headers:{
             Authorization:`Bearer ${token}`
         }
     });
     setOrder(res.data.orders);
+    console.log(res.data.orders)
   };
 
 //   const handleSubmit = async () => {
@@ -46,7 +47,7 @@ const handleSubmit = async () => {
   const token = localStorage.getItem("token");
 
   await axios.patch(
-    `${import.meta.env.VITE_API_URL}/api/order/edit-order/${selectedOrderId}`,
+    `${import.meta.env.VITE_API_URL}/api/order/${selectedOrderId}`,
     { status: selectedstatus.status },
     {
       headers: {
@@ -106,10 +107,14 @@ const handleSubmit = async () => {
             <div className="text-sm space-y-1 mb-4">
               <p><strong>Total:</strong> ${orderItem.totalAmount}</p>
               {/* <p><strong>Payment:</strong> {orderItem.paymentMethod.toUpperCase()}</p> */}
-              <p><strong>City:</strong> {orderItem.city}</p>
-              <p><strong>Pincode:</strong> {orderItem.zipcode}</p>
+              <p><strong>City:</strong> {orderItem.address?.city}</p>
+              <p><strong>Pincode:</strong> {orderItem.address?.zipcode}</p>
               {/* <p><strong>Transaction ID:</strong> {orderItem.paypalTransactionId}</p> */}
-               <p><strong>Email:</strong> {orderItem.email}</p>
+               <p><strong>Email:</strong>{orderItem.address?.email}</p>
+               <p><strong>Paypal Order Id:</strong>{orderItem.payment?.paypalOrderId}</p>
+               <p><strong>Paypal Transaction Id:</strong>{orderItem.payment?.paypalTransactionId}</p>
+               <p><strong>Created At:</strong>{orderItem.createdAt}</p>
+               <p><strong>Updated At:</strong>{orderItem.updatedAt}</p>
               
             </div>
 

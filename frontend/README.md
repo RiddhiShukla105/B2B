@@ -19,3 +19,7 @@ If you are developing a production application, we recommend using TypeScript wi
 pF00vtmhZ7lbFbjJ
 
 mongodb+srv://modastitchh_db_user:mjT5cHskRcsHQ6zR@cluster0.u5e5tk4.mongodb.net/?appName=Cluster0
+
+Lazy loading using Intersection Observer with scroll-based entrance animation
+
+6. Ticker scroll component for Framer

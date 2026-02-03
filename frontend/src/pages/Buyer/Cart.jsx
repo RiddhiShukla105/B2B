@@ -105,7 +105,7 @@ const Cart = () => {
 
             <div className="flex items-center gap-4">
               <button
-                onClick={() => item.qty > 5 && updateQty(item.id,item.size, -1)}
+                onClick={() => item.qty > 1 && updateQty(item.id,item.size, -1)}
                 className="px-3 py-1 border rounded"
               >
                 −
@@ -133,10 +133,10 @@ const Cart = () => {
       ))}
 
     <hr/>
-    <div className="font-bold text-3xl text-center">Total: ${totalPrice}</div>
+    <div className="font-bold text-3xl text-center">Total: ${totalPrice.toFixed(2)}</div>
 
     <div className="text-center">
-        <button type="submit" className="bg-black text-white text-2xl py-2 px-4 hover:bg-black/80" onClick={()=>navigate('/order')}>Place Order</button>
+        <button type="submit" className="bg-[#3B2F2F]  text-white text-2xl rounded-full font-bold py-2 px-18 hover:bg-[#2A1F1F]/80" onClick={()=>navigate('/order')}>Place Order</button>
     </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#0b0b0f] text-gray-300 mt-16">
+    <footer className="relative bg-[#0b0b0f] text-gray-300 mt-16 font-serif">
 
       {/* Subtle top divider */}
       <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-yellow-500/40 to-transparent"></div>
@@ -20,6 +20,7 @@ const Footer = () => {
         <p className="mt-5 max-w-2xl mx-auto text-gray-400 leading-relaxed">
           Contemporary fashion crafted for comfort, confidence, and everyday elegance.
           Enter 2025 with refined style and timeless design.
+           
         </p>
 
         {/* Contact */}
@@ -58,7 +59,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/10 py-5 text-center text-xs text-gray-500">
+      <div className="border-t border-white/10 py-5 text-center text-xs text-gray-500 font-serif">
         © 2025 ModaStitch. All rights reserved.
       </div>
     </footer>

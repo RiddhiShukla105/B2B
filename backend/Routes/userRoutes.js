@@ -4,11 +4,11 @@ import express from 'express'
 const router=express.Router()
 
 router.post('/create-user',createUser)
-// router.put('/update-user/:id',updateUser)
 router.put('/block-user/:id',blockUser)
 router.put('/unblock-user/:id',unblockUser)
 router.get('/get-user',getUser)
 router.delete('/delete-user/:id',deleteUser)
 router.post('/login-user',loginUser)
+
 
 export default router;

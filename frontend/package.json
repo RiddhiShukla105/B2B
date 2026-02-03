@@ -10,15 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.9.2",
     "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "framer-motion": "^12.26.2",
+    "gsap": "^3.14.2",
     "lucide-react": "^0.562.0",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
+    "react-multi-carousel": "^2.8.6",
     "react-router-dom": "^7.11.0",
     "react-toastify": "^11.0.5",
     "sweetalert2": "^11.26.17",
