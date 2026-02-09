@@ -29,7 +29,7 @@ const Tshirt = () => {
     }
   return (
 
-<div className='bg-[#fff9f3] pb-8'>
+<div className='bg-[#fdfaf6] pb-8'>
   {/* Banner Section */}
   <section className="w-full relative overflow-hidden pb-0!">
   <img
