@@ -611,10 +611,10 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
     "
   >
     {[
-      "DSornlJEa-k",
-      "DSmrTmaEZNB",
-      "DRMP6TaETzT",
-      "DTAQrF_EdAL",
+      "DUi3AZggZ72",
+      "DUbQnhkk3ro",
+      "DUfMj0iEWjX",
+      "DUcNnUhk6j2",
     ].map((id) => (
       <div
         key={id}
