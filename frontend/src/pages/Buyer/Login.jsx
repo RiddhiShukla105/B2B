@@ -49,33 +49,33 @@ const Login = () => {
 };
 
 
-  return (
-    <div className="grid grid-cols-2 shadow-2xl my-9 mx-20 rounded">
-      {/* LEFT */}
-      <div className="text-center bg-red-400 pt-8">
-        <div className="text-white text-4xl font-bold my-12">
+ return (
+  <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+    <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 rounded-2xl shadow-2xl overflow-hidden">
+
+      {/* LEFT SIDE */}
+      <div className="bg-red-400 flex flex-col justify-center items-center text-center p-8 md:p-12">
+        <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">
           Bonjour, Customers!
-        </div>
-        <div className="text-white text-2xl font-semibold">
+        </h2>
+
+        <p className="text-white text-base md:text-xl mb-8">
           Create an account with us!
           <br />
-          <br />
-          Then Login and continue shopping with us!
-          <br />
-          <Link to="/sign">
-            <input
-              type="button"
-              value="Sign-up"
-              className="bg-white text-red-400 rounded-2xl px-16 py-2 text-xl my-16 cursor-pointer"
-            />
-          </Link>
-        </div>
+          Then login and continue shopping!
+        </p>
+
+        <Link to="/sign">
+          <button className="bg-white text-red-400 font-semibold rounded-xl px-10 py-3 text-lg hover:bg-gray-100 transition duration-300">
+            Sign-up
+          </button>
+        </Link>
       </div>
 
-      {/* RIGHT */}
-      <div className="text-center bg-teal-700 pt-8">
-        <form onSubmit={handleSubmit}>
-          <h1 className="text-5xl font-black my-12 text-white">
+      {/* RIGHT SIDE */}
+      <div className="bg-teal-700 flex flex-col justify-center items-center p-8 md:p-12">
+        <form onSubmit={handleSubmit} className="w-full max-w-md">
+          <h1 className="text-3xl md:text-5xl font-black text-center mb-10 text-white">
             Sign-In
           </h1>
 
@@ -84,32 +84,33 @@ const Login = () => {
             name="email"
             onChange={handleInput}
             value={formdata.email}
-            className="border-2 border-gray-200 w-1/2 p-2 mb-8 bg-gray-200"
-            placeholder="Johndoe@gmail.com"
+            className="w-full p-3 mb-6 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white"
+            placeholder="johndoe@gmail.com"
             required
           />
-          <br />
 
           <input
             type="password"
             name="password"
             onChange={handleInput}
             value={formdata.password}
-            className="border-2 border-gray-200 w-1/2 p-2 mb-4 bg-gray-200"
+            className="w-full p-3 mb-8 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white"
             placeholder="**********"
             required
           />
-          <br />
 
-          <input
+          <button
             type="submit"
-            value="Submit"
-            className="bg-white text-teal-700 rounded-2xl px-16 py-2 text-xl my-16 cursor-pointer"
-          />
+            className="w-full bg-white text-teal-700 font-semibold rounded-xl py-3 text-lg hover:bg-gray-100 transition duration-300"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Login;

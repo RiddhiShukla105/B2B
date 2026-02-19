@@ -170,7 +170,7 @@ const handleLogout = () => {
 <>
 
 
-<div className="bg-gradient-to-b from-black via-black/90 to-black/85 sticky top-0 z-50">
+<div className="bg-gradient-to-b from-black via-black/90 to-black/85 sticky top-0 z-50 overflow-hidden">
   {/* 🔹 Top Bar */}
   <div className="flex justify-between items-center text-white px-4 sm:px-8 py-3">
     
@@ -201,11 +201,16 @@ const handleLogout = () => {
           ))}
       {isLoggedIn ? (
         <>
+
+          <Link to="/orderdata"><span className="text-lg font-serif hover:text-red-400 transition">
+                Order
+              </span></Link>
+
           <Link to="/cart">
             <AiOutlineShoppingCart size={22} className="hover:text-red-400" />
           </Link>
 
-          <AiFillHeart size={22} className="hover:text-red-400 cursor-pointer" />
+          {/* <AiFillHeart size={22} className="hover:text-red-400 cursor-pointer" /> */}
 
           <AiOutlineUser
             size={22}
@@ -231,7 +236,7 @@ const handleLogout = () => {
 
   {/* 🔹 Mobile Menu */}
   {open && (
-    <div className="md:hidden bg-black/95 px-6 pb-4 text-gray-200 text-sm space-y-4 sticky">
+    <div className="md:hidden bg-black/95 px-6 pb-4 text-gray-200 text-md space-y-4 sticky overflow-hidden">
       
       {/* Mobile Search */}
       <input
@@ -243,7 +248,7 @@ const handleLogout = () => {
 
       {filteredRoutes.map((item) => (
           <Link key={item.path} to={item.path} onClick={() => setOpen(false)}>
-            <div className="md:text-lg sm:text-sm font-serif hover:text-red-400">
+            <div className="md:text-lg sm:text-xl font-serif hover:text-red-400 mt-4">
               {item.name}
             </div>
           </Link>
@@ -251,17 +256,24 @@ const handleLogout = () => {
 
       {/* Mobile Links */}
       {isLoggedIn &&
-      <div className="flex gap-6 pt-3">
+      <div className="mt-4">
+
+        <Link to="/orderdata"><span className="text-lg font-serif hover:text-red-400 transition">
+                Order
+              </span></Link>
+
+      <div className="mt-4">
         <Link to="/cart">
           <AiOutlineShoppingCart size={22} />
-        </Link>
-        <AiFillHeart size={22} />
+        </Link></div>
+        
+        {/* <div className="mt-4"><AiFillHeart size={22} /></div> */}
         {/* <AiOutlineUser size={22} onClick={handleLogout} /> */}
       </div>
         }
 
       
-      <div className="flex gap-6 pt-3">
+      <div className="">
         {/* <Link to="/cart">
           <AiOutlineShoppingCart size={22} />
         </Link>

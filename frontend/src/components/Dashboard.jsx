@@ -8,7 +8,7 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
  import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ScrollReveal from "./ScrollReveal";
 import Crousel from "./Crousel";
@@ -19,47 +19,49 @@ import GridReveal from "./GridReveal";
 
 
 
+
 const Dashboard = () => {
 
  const [active, setActive] = useState(null);
  const[products,setProducts]=useState([])
  const[shirts,setShirts]=useState([])
+ const[loopProduct,setLoopProduct]=useState([])
  const[allproduct,setAllproduct]=useState([])
     const navigate=useNavigate()
     const imageRefs=useRef([])
     const category="t-shirt"
 
-useEffect(()=>{fetchData()},[])
+useEffect(() => {
+  fetchData()
+  const loadData = async () => {
+    try {
+      const first = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/product/loop-product`,
+        { params: { cycle: 0 } }
+      );
+      console.log(first.data)
+      const second = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/product/loop-product`,
+        { params: { cycle: 1 } }
+      );
+      console.log(second.data)
 
-// const handleWishlist = async (item) => {
-//   try {
-//     const token = localStorage.getItem("token");
+      setLoopProduct([
+        ...first.data.product,
+        ...second.data.product
+      ]);
 
-//     if (!token) {
-//       navigate("/login");
-//       return;
-//     }
+      console.log("Updated loopProduct:", loopProduct);
 
-//     const res = await axios.post(
-//       `${import.meta.env.VITE_API_URL}/api/wishlist/add`,
-//       {
-//         productId: item._id
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-//     console.log("Added to wishlist:", res.data);
-//   } catch (error) {
-//     console.error(
-//       "Wishlist error:",
-//       error.response?.data || error.message
-//     );
-//   }
-// };
+  loadData();
+
+}, []);
+
 const handleWishlist = async (product) => {
   if (!product?._id) return;
 
@@ -122,25 +124,25 @@ const fetchData = async () => {
 const data = [
   {
     title: "Return Policy",
-    content: "Replacement of the same order will be provided within 5 days."
+    content: "Replacement of the same order will be provided within 7 days."
   },
   {
     title: "Shipping Policy",
-    content: "Orders will be delivered within 5 business days."
+    content: "Orders will be delivered within 7 business days."
   },
   {
     title: "About Us",
-    content: `Born from a deep understanding of style, quality, and evolving market needs, our brand focuses on delivering well-crafted, trend-forward apparel designed for today’s man.
+    content: `Modastitch is a US-based fashion brand dedicated to redefining modern streetwear for men. Built on a passion for quality craftsmanship, contemporary style, and everyday comfort, Modastitch delivers premium shirts and apparel at an affordable range — making elevated fashion accessible without compromise.
 
-From timeless essentials to contemporary fashion pieces, every product is created with attention to detail, fit, and fabric excellence.
+Our mission is simple:
 
-As a B2B-focused e-commerce brand, we partner globally, offering reliable sourcing, consistent quality, and seamless delivery.
+➡️ Create stylish, durable, and trend-forward clothing
+➡️ Blend premium feel with streetwear edge
+➡️ Offer value for every wardrobe — no labels, just quality
 
-Our goal is to build a strong, globally recognized men’s fashion brand that businesses trust.`
-  },
-  {
-    title: "Minimum Buy for Wholesale",
-    content: "A minimum purchase of 10 shirts is required for wholesale orders."
+We design with intention. Every tee, graphic top, and casual shirt in our collection is crafted from premium fabrics, engineered for fit and longevity. Inspired by urban culture, minimalist design, and quality tailoring, our pieces elevate everyday outfits whether you’re hitting the city streets or weekend meet-ups.
+
+At Modastitch, style isn’t just seasonal — it’s timeless.`
   }
 ];
 
@@ -201,46 +203,8 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
 
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 overflow-hidden">
       
-      {/* <div className="relative">
-   <img
-    src="/image/poster2.png"
-    alt=""
-    className="w-full h-[60vh] md:h-160 object-cover rounded-xl"
-  /> 
-
-  
-  <div
-    className="absolute inset-0 rounded-xl
-      bg-gradient-to-br 
-      from-black/90 
-      via-black/50 
-      to-transparent"
-  ></div>
-
-
-  <div className="absolute inset-4 z-10 flex items-center">
-  <div className="ml-12 max-w-4xl text-white space-y-4">
-    <h1 className="text-3xl md:text-5xl font-bold font-sans">
-      <span className="text-6xl">S</span>ource Men’s Fashion with Confidence
-    </h1>
-
-    <i><h2 className="text-lg md:text-2xl  font-bold font-medium font-sans text-gray-200">
-      <span className="text-3xl">V</span>erified wholesale supply, flexible MOQ, and global shipping.
-    </h2></i>
-  </div>
-
-<button className="absolute bg-black text-white px-40 py-3 text-2xl font-bold font-sans rounded-4xl
-  md:mt-80 md:ml-30 md:left-auto md:translate-x-0
-  hover:bg-black/90 hover:text-red-400 hover:text-3xl
-  duration-300
-  ring-0 hover:ring-2 hover:ring-red-400 hover:ring-offset-2 hover:ring-offset-black
-  transition-all">
-  Shop Now
-</button> 
-</div>
-</div>  */}
 
 <section className="relative bg-[#252626] text-white/90 overflow-hidden">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -278,9 +242,9 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
       </p>
 
       <div className="mt-10 flex justify-center md:justify-start ">
-        <button className="bg-yellow-400 text-black px-10 sm:px-14 py-3 rounded-full font-semibold  hover:bg-transparent hover:text-yellow-400 hover:text-xl hover:outline-2 hover:outline-yellow-400 hover:px-44 transition hover:transition-all hover:duration-75 ">
+        <Link to="/tshirt"><button className="bg-yellow-400 text-black px-10 sm:px-14 py-3 rounded-full font-semibold  hover:bg-transparent hover:text-yellow-400 hover:text-xl hover:outline-2 hover:outline-yellow-400 hover:px-44 transition hover:transition-all hover:duration-75 ">
           Shop Now
-        </button>
+        </button></Link>
       </div>
       
     </div>
@@ -320,65 +284,10 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
 </section>
 
 
-{/* <section className="bg-[#F7F7F5] text-gray-900">
-      <div className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
 
-       
-        <div className="space-y-6">
-          <span className="text-xs tracking-widest text-gray-500 uppercase">
-            Thoughtfully Made
-          </span>
-
-          <h1 className="text-4xl md:text-5xl font-serif leading-tight">
-            Elevated Essentials<br />for Everyday Wear
-          </h1>
-
-          <p className="text-gray-600 max-w-md">
-            Clean silhouettes, breathable fabrics, and timeless construction —
-            designed to move effortlessly with you.
-          </p>
-
-          <button className="inline-flex items-center gap-2 text-sm font-medium text-gray-900 border-b border-gray-300 hover:border-gray-900 transition">
-            View Collection →
-          </button>
-        </div>
-
-   
-        <div className="relative">
-          <img
-            src="/image/gb.png"
-            alt="Everyday Shirt"
-            className="w-full max-w-md mx-auto"
-          />
-
-          
-          <div className="absolute inset-0 -z-10 bg-gray-200/60 blur-3xl rounded-full"></div>
-        </div>
-
-      </div>
-    </section> */}
-
-{/* <section>
-  <div className="bg-[#8a6e4e] relative py-20 px-6">
-
-    <div className="relative z-10">
-      <Card2 />
-    </div>
-
-    <div
-      className="absolute inset-0 rounded-xl
-                 bg-gradient-to-br 
-                 from-black/90 
-                 via-black/50 
-                 to-transparent
-                 pointer-events-none"
-    ></div>
-
-  </div>
-</section> */}
 
 <section>
-  <div className="bg-white grid grid-cols-1 md:grid-cols-[2fr_3fr] py-10">
+  <div className="bg-white grid grid-cols-1 md:grid-cols-[2fr_3fr] py-10 hidden md:grid">
     
     {/* TEXT SECTION */}
     <div className="py-8 md:py-12 px-4 md:px-12 tracking-widest text-center">
@@ -402,7 +311,7 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
     </div>
 
     {/* TIMELINE SECTION */}
-    <div className="px-4 md:px-0 ">
+    <div className="px-4 md:px-0">
       <ScrollReveal>
         <div className="card">
           <Timeline
@@ -640,25 +549,22 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
 </section>
 
 
-
-
-
-<section className="block md:hidden">
-  <div className="grid grid-cols-2 mx-4 my-4 gap-4">
-    {Array.isArray(allproduct) && allproduct.map((item, id) => (
+<section>
+  <div className="grid grid-cols-2 md:hidden mx-4 my-4 gap-4">
+    {Array.isArray(loopProduct) && loopProduct.map((item, id) => (
+      <div onClick={() => handleClick(item)}>
       <Cards
-        key={id}
-        image={item.image.map(
-          img => `${import.meta.env.VITE_API_URL}/uploads/${img}`
-        )}
+        key={item._id || id}
+        image={[`${import.meta.env.VITE_API_URL}/uploads/${item.displayImage}`]}
         title={item.name}
         price={item.price}
-        onView={() => handleClick(item)}
-        onAddToCart={() => console.log("Add to cart: ", item._id)}
       />
+      </div>
     ))}
   </div>
 </section>
+
+
 
 
 
@@ -810,4 +716,8 @@ Our goal is to build a strong, globally recognized men’s fashion brand that bu
 };
 
 export default Dashboard;
+
+
+
+
 

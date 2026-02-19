@@ -15,6 +15,7 @@ import OrderData from '../pages/Admin/OrderData'
 import OrderUpdate from '../pages/Admin/OrderUpdate'
 import Wishlist from '../pages/Buyer/Wishlist'
 import Admin_Dashboard from '../pages/Admin/Admin_Dashboard'
+import Test from '../pages/Buyer/Test'
 
 
 const AppRoutes=[
@@ -86,7 +87,7 @@ const AppRoutes=[
         Component:()=>(
             <ProtectedRoute publicRoute><OrderData/></ProtectedRoute>
         ),
-        name:"Order"
+        
     },
     {
         path:"/orderupdate",
@@ -105,7 +106,13 @@ const AppRoutes=[
         Component:()=>(
             <ProtectedRoute publicRoute><Admin_Dashboard/></ProtectedRoute>
         )
-    }
+    },
+    // {
+    //     path:"/test",
+    //     Component:()=>(
+    //         <ProtectedRoute publicRoute><Test/></ProtectedRoute>
+    //     )
+    // }
     // {
     //     path:"/cart",
     //     Component:()=>(

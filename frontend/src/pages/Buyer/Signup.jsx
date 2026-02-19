@@ -117,55 +117,75 @@ const Signup=()=>{
     // }
 
 
-    return(
-        <>
-
-        <div className="grid grid-cols-2 shadow-2xl my-9 mx-20 rounded">
-{/* cyan-600 ,teal-600*/}
-        <div className="text-center bg-teal-700 pt-8">
-            <form onSubmit={handleSubmit}>
-            <h1 className="text-5xl font-black text-center my-12 text-white">Sign-up</h1>
-            <input type="text"  name="name" id="" onChange={handleInput}  className="border-2 border-gray-200 w-1/2 p-2 mb-4 bg-gray-200" placeholder="John Doe"/><br/>
-            <input type="email" name="email" id="" onChange={handleInput} className="border-2 border-gray-200 w-1/2 p-2 mb-4 bg-gray-200" placeholder="Johndoe@gmail.com"/><br/>
-            <input type="password" name="password" id="" onChange={handleInput} className="border-2 border-gray-200 w-1/2 p-2 bg-gray-200" placeholder="Jo@4765768"/><br/>
-            <input type="submit" value="Submit" className="bg-white text-teal-700 rounded-2xl px-16 py-2 text-xl my-16 " />
-            </form>
-        </div>
-        <div className="text-center bg-red-400 pt-8">
-            <div className="text-white text-4xl font-bold my-12">Bonjour, Customers!</div>
-            <div className="text-white text-2xl font-semibold">
-            Already have an Account with us?
-             <br/><br/>
-              Then Login and continue shopping with us! <br />
-              <Link to="/login"><input type="submit" value="Login" className="bg-white text-red-400 rounded-2xl px-16 py-2 text-xl my-16" /></Link>
-               </div>
-        </div>
-        </div>
-
-        {/* {Array.isArray(userData) && userData.map((item)=>(
-            <div key={item._id}>
-                <span>{item.name}</span>
-                <span>{item.email}</span>
-                <span><button type="submit" onClick={()=>handleUpdate(item)}>Update</button></span>
-                <span><button type="submit" onClick={()=>handleDelete(item)}>Delete</button></span>
-                <span><button type="submit" onClick={()=>handleblock(item)}>Block</button></span>
-                <span><button type="submit" onClick={()=>handleunblock(item)}>UnBlock</button></span>
-            </div>
-        ))}
-
+    return (
+  <>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-10">
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 rounded-2xl shadow-2xl overflow-hidden">
         
+        {/* LEFT SIDE - SIGNUP */}
+        <div className="bg-teal-700 flex flex-col justify-center items-center p-8 md:p-12">
+          <form onSubmit={handleSubmit} className="w-full max-w-md">
+            
+            <h1 className="text-3xl md:text-5xl font-black text-center mb-10 text-white">
+              Sign-up
+            </h1>
 
-        {visible && (
-            <form  onClick={handleUpdateSubmit}>
-                <div>
-                <input type="text" name="name" id="" onChange={handleInput} value={form.name}/>
-                <button type="submit" >Update</button>
-            </div>
-            </form>
-        )} */}
+            <input
+              type="text"
+              name="name"
+              onChange={handleInput}
+              className="w-full p-3 mb-4 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="John Doe"
+            />
 
-        </>
-    )
+            <input
+              type="email"
+              name="email"
+              onChange={handleInput}
+              className="w-full p-3 mb-4 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="johndoe@gmail.com"
+            />
+
+            <input
+              type="password"
+              name="password"
+              onChange={handleInput}
+              className="w-full p-3 mb-6 rounded-lg bg-gray-200 focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="Jo@4765768"
+            />
+
+            <button
+              type="submit"
+              className="w-full bg-white text-teal-700 font-semibold rounded-xl py-3 text-lg hover:bg-gray-100 transition duration-300"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+
+        {/* RIGHT SIDE - LOGIN */}
+        <div className="bg-red-400 flex flex-col justify-center items-center text-center p-8 md:p-12">
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-6">
+            Bonjour, Customers!
+          </h2>
+
+          <p className="text-white text-base md:text-xl mb-8">
+            Already have an account with us?
+            <br />
+            Then login and continue shopping!
+          </p>
+
+          <Link to="/login">
+            <button className="bg-white text-red-400 font-semibold rounded-xl px-10 py-3 text-lg hover:bg-gray-100 transition duration-300">
+              Login
+            </button>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </>
+);
+
 }
 
 export default Signup;
